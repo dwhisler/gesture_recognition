@@ -1,6 +1,9 @@
 #include "SensorFuser.h"
 
 SensorFuser sf;
+float* acc;
+float* gyr;
+Quaternion q;
 
 void setup() {
   Serial.begin(115200);
@@ -19,7 +22,27 @@ void setup() {
 void loop() {
 
   if (sf.updateOrientation()) {
-    sf.getOrientation().serialPrint();
+    // Serial.print("RAW ");
+    acc = sf.getAcc();
+    gyr = sf.getGyr();
+    for (int i = 0; i < 3; i++) {
+      Serial.print(acc[i]);
+      Serial.print(" ");
+      Serial.print(gyr[i]);
+      Serial.print(" ");
+    }
+
+    // Serial.println();
+    // sf.getOrientation().serialPrint();
+    q = sf.getOrientation();
+    for (int i = 0; i < 4; i++) {
+      Serial.print(q.q[i]);
+      Serial.print(" ");
+    }
+
+    Serial.print(sf.getSampleRate());
+
+    Serial.println();
   }
 
 }

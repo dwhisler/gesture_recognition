@@ -79,15 +79,20 @@ class SensorFuser {
      * @returns read-only reference to accelerometer values,
      * order is ax,ay,az
      */
-    const float* getAcc() const { return acc; };
+    float* getAcc() { return acc; };
 
 
     /**
      * @returns read-only reference to gyroscope values,
      * order is wx, wy, wz
      */
-    const float* getGyr() const { return gyr; };
+    float* getGyr() { return gyr; };
 
+
+    /**
+     * @returns sample rate in Hz
+     */
+    int getSampleRate() { return sample_rate; };
 
     /**
      * @returns read-only reference to gyroscope bias values
@@ -136,6 +141,12 @@ class SensorFuser {
      * in IMU ref frame (z-axis points out of imu).
      */
     float acc[3];
+
+
+    /**
+     * sample rate in Hz
+     */
+    int sample_rate;
 
 
     /**

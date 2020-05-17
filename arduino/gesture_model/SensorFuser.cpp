@@ -9,6 +9,7 @@ SensorFuser::SensorFuser() :
   imu(IMUHandler()),
   gyr{0,0,0},
   acc{0,0,0},
+  sample_rate(0),
   gyr_bias{0,0,0},
   acc_bias{0,0,0},
   prevT(0.0),
@@ -19,7 +20,9 @@ SensorFuser::SensorFuser() :
 {}
 
 bool SensorFuser::initImu() {
-  return imu.init();
+  bool success = imu.init();
+  sample_rate = imu.sample_rate;
+  return success;
 }
 
 /**
