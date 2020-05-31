@@ -1,3 +1,5 @@
 pyserial
 tensorflow
 matplotlib
+sklearn
+keyboard

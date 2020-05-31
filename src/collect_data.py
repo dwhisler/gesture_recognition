@@ -10,7 +10,7 @@ def read_session():
         raw_data = []
         new_data_available = False
 
-        performer = "david"
+        performer = "bill"
         take = 1
 
         measuring_bias = True
@@ -22,14 +22,7 @@ def read_session():
         print('Ready for new capture, press q to quit, CTRL to capture new data')
         while not keyboard.is_pressed('q'):
             if keyboard.is_pressed('ctrl'):
-                print('Which gesture will you perform? 1 for Wing, 2, for Ring, 3 for Slope, 4 for None')
-                time.sleep(0.1)
-                gesture = keyboard.read_key()
-                while not (gesture == '1' or gesture == '2' or gesture == '3' or gesture == '4'):
-                    print("Gesture not recognized")
-                    print('Which gesture will you perform? 1 for Wing, 2, for Ring, 3 for Slope, 4 for None')
-                    gesture = keyboard.read_key()
-
+                gesture = 'leftcircle'
                 new_data_available = True
                 print('Capturing data, press Space to stop')
                 while not keyboard.is_pressed('space'):
@@ -44,16 +37,9 @@ def read_session():
         print('Finished session')
 
 def parse_data(raw_data, gesture, performer, take):
-    if gesture == '1':
-        gesture = 'wing'
-    elif gesture == '2':
-        gesture = 'ring'
-    elif gesture == '3':
-        gesture = 'slope'
-    else:
-        gesture = 'none'
+    path = '../data/session2/'
 
-    fname = performer + '_' + gesture + '_' + str(take) + '.csv'
+    fname = path + performer + '_' + gesture + '_' + str(take) + '.csv'
 
     with open(fname, 'w') as f:
         f.write('accX,gyrX,accY,gyrY,accZ,gyrZ,qW,qX,qY,qZ,sample_rate,\n')
