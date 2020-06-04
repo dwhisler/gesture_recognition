@@ -54,14 +54,11 @@ def build_model(data_axes, seq_length, num_classes):
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Conv2D(8, (4, data_axes), padding='same', activation='relu', input_shape=(seq_length, data_axes, 1)))
     model.add(tf.keras.layers.MaxPool2D((3, data_axes)))
-    model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dropout(0.1))
     model.add(tf.keras.layers.Conv2D(16, (4, 1), padding='same', activation='relu'))
-    model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dropout(0.1))
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(16, activation='relu'))
-    model.add(tf.keras.layers.BatchNormalization())
     model.add(tf.keras.layers.Dropout(0.1))
     model.add(tf.keras.layers.Dense(num_classes, activation='softmax'))
 
@@ -118,7 +115,7 @@ def train_model():
     X = X[:, :, :, np.newaxis] # add channels axis (1)
 
     #X = X[:, :, 0:5:2] # acceleration data only
-    X = X[:, :, -4:] # quaternion data only
+    #X = X[:, :, -4:] # quaternion data only
     #X = X[:, :, :6] # acceleration & gyro data only
     data_axes = X.shape[2]
 
@@ -142,7 +139,7 @@ def train_model():
     model.fit(ds_train, epochs=epochs, validation_data=ds_test)
     model.evaluate(ds_test)
 
-    model.save('../saved_models/david_click_gestures_model_fused2')
+    model.save('../saved_models/david_click_gestures_model_raw_and_fused')
 
 
 if __name__ == '__main__':
