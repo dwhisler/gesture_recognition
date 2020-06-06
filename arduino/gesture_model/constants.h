@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,25 +17,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_CONSTANTS_H_
-#define TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_CONSTANTS_H_
-
-// The expected accelerometer data sample frequency
-const float kTargetHz = 25;
+#ifndef CONSTANTS_H_
+#define CONSTANTS_H_
 
 // What gestures are supported.
-constexpr int kGestureCount = 5;
+constexpr int kGestureCount = 4;
 constexpr int kNoGesture = 0;
-constexpr int kClickGesture = 1;
-constexpr int kDoubleClickGesture = 2;
-constexpr int kRightCircleGesture = 3;
-constexpr int kLeftCircleGesture = 4;
+constexpr int kUpGesture = 1;
+constexpr int kDownGesture = 2;
+constexpr int kRightGesture = 3;
 
 // The number of channels for the data input
-constexpr int kChannelNumber = 10;
+constexpr int kChannelNumber = 3;
 
 // The length of a full data sequence for inference
-constexpr int kSeqLength = 255;
+constexpr int kSeqLength = 256;
 
 // Length of ring buffer
 constexpr int kBuffLength = 300;
@@ -47,6 +47,6 @@ constexpr int kBuffSize = kChannelNumber*kBuffLength;
 // predictions.
 constexpr float kDetectionThreshold = 0.8f;
 constexpr int kPredictionHistoryLength = 5;
-constexpr int kPredictionSuppressionDuration = 25;
+constexpr int kPredictionSuppressionDuration = 10;
 
-#endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_CONSTANTS_H_
+#endif

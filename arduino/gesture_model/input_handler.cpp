@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,16 +25,10 @@ limitations under the License.
 
 #include "input_handler.h"
 
-// A buffer holding the last 200 sets of 3-channel values
+// A ring buffer holding the most recent data
 float save_data[kBuffSize] = {0.0};
 // Most recent position in the save_data buffer
 int begin_index = 0;
-// True if there is not yet enough data to run inference
-bool pending_initial_data = true;
-// How often we should save a measurement during downsampling
-int sample_every_n;
-// The number of measurements since we last saved one
-int sample_skip_counter = 1;
 // The SensorFuser object where IMU data is read from
 SensorFuser sf;
 
@@ -45,13 +43,9 @@ TfLiteStatus SetupIMU(tflite::ErrorReporter* error_reporter) {
     return kTfLiteError;
   }
 
+  // Compute initial value for accelerometer and gyro bias
   error_reporter->Report("Measuring bias...");
   sf.measureImuBias();
-
-  // Determine how many measurements to keep in order to
-  // meet kTargetHz
-  // float sample_rate = (float) sf.getSampleRate();
-  // sample_every_n = static_cast<int>(roundf(sample_rate / kTargetHz));
 
   error_reporter->Report("Magic starts!");
 
@@ -63,39 +57,27 @@ bool ReadIMU(tflite::ErrorReporter* error_reporter, float* input,
   // Keep track of whether we stored any new data
   bool new_data = false;
   // Loop through new samples and add to buffer
-  while (sf.updateOrientation()) {
+  if (sf.updateOrientation()) {
    float* acc;
    float* gyr;
    Quaternion q;
 
-   // Throw away this sample unless it's the nth
-   // if (sample_skip_counter != sample_every_n) {
-   //   sample_skip_counter += 1;
-   //   continue;
-   // }
-   acc = sf.getAcc();
-   gyr = sf.getGyr();
-   q = sf.getOrientation();
+   acc = sf.getAcc(); // accelerometer values
+   gyr = sf.getGyr(); // gyroscope values
+   q = sf.getOrientation(); // sensor fused quaternion orientation
 
-   // Write samples to our buffer, converting to milli-Gs
-   // and flipping y and x order for compatibility with
-   // model (sensor orientation is different on Arduino
-   // Nano BLE Sense compared with SparkFun Edge)
+   // Write samples to our buffer
    save_data[begin_index++] = acc[0];
-   save_data[begin_index++] = gyr[0];
+   // save_data[begin_index++] = gyr[0];
    save_data[begin_index++] = acc[1];
-   save_data[begin_index++] = gyr[1];
+   // save_data[begin_index++] = gyr[1];
    save_data[begin_index++] = acc[2];
-   save_data[begin_index++] = gyr[2];
-   save_data[begin_index++] = q.q[0];
-   save_data[begin_index++] = q.q[1];
-   save_data[begin_index++] = q.q[2];
-   save_data[begin_index++] = q.q[3];
+   // save_data[begin_index++] = gyr[2];
+   // save_data[begin_index++] = q.q[0];
+   // save_data[begin_index++] = q.q[1];
+   // save_data[begin_index++] = q.q[2];
+   // save_data[begin_index++] = q.q[3];
 
-   error_reporter->Report("Acc z: %f", acc[0]);
-
-   // Since we took a sample, reset the skip counter
-   sample_skip_counter = 1;
    // If we reached the end of the circle buffer, reset
    if (begin_index >= kBuffSize) {
      begin_index = 0;
@@ -105,16 +87,6 @@ bool ReadIMU(tflite::ErrorReporter* error_reporter, float* input,
 
   // Skip this round if data is not ready yet
   if (!new_data) {
-   return false;
-  }
-
-  // Check if we are ready for prediction or still pending more initial data
-  if (pending_initial_data && begin_index >= kBuffLength) {
-   pending_initial_data = false;
-  }
-
-  // Return if we don't have enough data
-  if (pending_initial_data) {
    return false;
   }
 

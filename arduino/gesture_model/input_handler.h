@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#ifndef TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_ACCELEROMETER_HANDLER_H_
-#define TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_ACCELEROMETER_HANDLER_H_
+#ifndef INPUT_HANDLER_H_
+#define INPUT_HANDLER_H_
 
 #include "tensorflow/lite/c/common.h"
 #include "tensorflow/lite/micro/micro_error_reporter.h"
@@ -30,4 +34,4 @@ extern TfLiteStatus SetupIMU(tflite::ErrorReporter* error_reporter);
 extern bool ReadIMU(tflite::ErrorReporter* error_reporter,
                               float* input, int length);
 
-#endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_ACCELEROMETER_HANDLER_H_
+#endif

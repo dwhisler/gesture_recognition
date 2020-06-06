@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +18,6 @@ limitations under the License.
 ==============================================================================*/
 
 #include <TensorFlowLite.h>
-#include <ArduinoBLE.h>
 
 #include "main_functions.h"
 
@@ -32,17 +35,18 @@ limitations under the License.
 
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
-tflite::ErrorReporter* error_reporter = nullptr;
-const tflite::Model* model = nullptr;
-tflite::MicroInterpreter* interpreter = nullptr;
-TfLiteTensor* model_input = nullptr;
-int input_length;
+  tflite::ErrorReporter* error_reporter = nullptr;
+  const tflite::Model* model = nullptr;
+  tflite::MicroInterpreter* interpreter = nullptr;
+  TfLiteTensor* model_input = nullptr;
+  int input_length;
+  int invoke_counter;
 
-// Create an area of memory to use for input, output, and intermediate arrays.
-// The size of this will depend on the model you're using, and may need to be
-// determined by experimentation.
-constexpr int kTensorArenaSize = 60 * 2048;
-uint8_t tensor_arena[kTensorArenaSize];
+  // Create an area of memory to use for input, output, and intermediate arrays.
+  // The size of this will depend on the model you're using, and may need to be
+  // determined by experimentation.
+  constexpr int kTensorArenaSize = 60 * 2048;
+  uint8_t tensor_arena[kTensorArenaSize];
 }  // namespace
 
 // The name of this function is important for Arduino compatibility.
@@ -113,19 +117,33 @@ void setup() {
 
   TfLiteStatus setup_status = SetupIMU(error_reporter);
   if (setup_status != kTfLiteOk) {
-    TF_LITE_REPORT_ERROR(error_reporter, "Set up failed\n");
+    TF_LITE_REPORT_ERROR(error_reporter, "IMU setup failed\n");
   }
+
+  invoke_counter = 0;
+
+  // bool ble_status = SetupBLE(error_reporter);
+  // if (!ble_status) {
+  //   TF_LITE_REPORT_ERROR(error_reporter, "BLE setup failed\n");
+  // }
 }
 
 void loop() {
-  // Attempt to read new data from the accelerometer.
-  bool got_data =
-      ReadIMU(error_reporter, model_input->data.f, input_length);
+  // Attempt to read new data from the IMU.
+
+  invoke_counter += 1; // counter to reduce lag in continuous inferences
+
+  bool got_data = ReadIMU(error_reporter, model_input->data.f, input_length);
   // If there was no new data, wait until next time.
   if (!got_data){
     return;
   }
 
+  if (invoke_counter <= kSeqLength-1) {
+    return;
+  }
+
+  invoke_counter = 0;
   // Run inference, and report any error.
   TfLiteStatus invoke_status = interpreter->Invoke();
 
@@ -135,7 +153,7 @@ void loop() {
     return;
   }
   // Analyze the results to obtain a prediction
-  int gesture_index = PredictGesture(interpreter->output(0)->data.f);
+  int gesture_index = PredictGesture(error_reporter, interpreter->output(0)->data.f);
 
   // Produce an output
   HandleOutput(error_reporter, gesture_index);

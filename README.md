@@ -1,6 +1,6 @@
 # Project Title
 
-One Paragraph of project description goes here
+Gesture Recognition Using a CNN on an Embedded Platform
 
 ## Getting Started
 

@@ -81,7 +81,7 @@ public:
   Quaternion inverse() {
     Quaternion inv = Quaternion();
 
-    double lensq = q[0]*q[0]+q[1]*q[1]+q[2]*q[2]+q[3]*q[3];
+    float lensq = q[0]*q[0]+q[1]*q[1]+q[2]*q[2]+q[3]*q[3];
 
     inv.q[0] = q[0]/lensq;
     inv.q[1] = -1*q[1]/lensq;

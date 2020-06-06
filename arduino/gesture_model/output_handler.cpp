@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +27,43 @@ limitations under the License.
 
 #include "Arduino.h"
 
+// // BLE Gesture Model Service
+// BLEService gestureService("180F");
+//
+// // Detected gesture characteristic
+// BLEByteCharacteristic detectedGestureChar("2A18",  // standard 16-bit characteristic UUID
+//   BLERead | BLENotify); // remote clients will be able to get notifications if this characteristic changes
+//
+// BLEDevice central;
+//
+// bool SetupBLE(tflite::ErrorReporter* error_reporter) {
+//   if (!BLE.begin()) {
+//     error_reporter->Report("Starting BLE Failed!");
+//     return false;
+//   }
+//
+//   /* Set a local name for the BLE device
+//      This name will appear in advertising packets
+//      and can be used by remote devices to identify this BLE device
+//      The name can be changed but maybe be truncated based on space left in advertisement packet
+//   */
+//   BLE.setLocalName("GestureDetector");
+//   BLE.setAdvertisedService(gestureService); // add the service UUID
+//   gestureService.addCharacteristic(detectedGestureChar); // add the detected gesture characteristic
+//   BLE.addService(gestureService); // Add the gesture service
+//   detectedGestureChar.writeValue((byte)0xAB); // set initial value for this characteristic ("none")
+//
+//   /* Start advertising BLE.  It will start continuously transmitting BLE
+//      advertising packets and will be visible to remote BLE central devices
+//      until it receives a new connection */
+//
+//   // start advertising
+//   BLE.advertise();
+//   error_reporter->Report("Bluetooth device active, waiting for connections...");
+//
+//   return true;
+// }
+
 void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
   // The first time this method runs, set up our LED
   static bool is_initialized = false;
@@ -39,38 +80,29 @@ void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
+  // Print to serial port
   if (kind == 0) {
-    error_reporter->Report("None");
+    // error_reporter->Report("None");
   }
   else if (kind == 1) {
-    error_reporter->Report("Click");
+    error_reporter->Report("Up");
   }
   else if (kind == 2) {
-    error_reporter->Report("Double Click");
+    error_reporter->Report("Down");
   }
   else if (kind == 3) {
-    error_reporter->Report("Right Circle");
-  }
-  else if (kind == 4) {
-    error_reporter->Report("Left Circle");
+    error_reporter->Report("Right");
   }
 
-  // Print some ASCII art for each gesture
-  // if (kind == 0) {
-  //   error_reporter->Report(
-  //       "WING:\n\r*         *         *\n\r *       * *       "
-  //       "*\n\r  *     *   *     *\n\r   *   *     *   *\n\r    * *       "
-  //       "* *\n\r     *         *\n\r");
-  // } else if (kind == 1) {
-  //   error_reporter->Report(
-  //       "RING:\n\r          *\n\r       *     *\n\r     *         *\n\r "
-  //       "   *           *\n\r     *         *\n\r       *     *\n\r      "
-  //       "    *\n\r");
-  // } else if (kind == 2) {
-  //   error_reporter->Report(
-  //       "SLOPE:\n\r        *\n\r       *\n\r      *\n\r     *\n\r    "
-  //       "*\n\r   *\n\r  *\n\r * * * * * * * *\n\r");
+  // // wait for a BLE central
+  // central = BLE.central();
+  // // Advertise to bluetooth
+  // if (central) {
+  //   error_reporter->Report("Connected to central");
+  //   detectedGestureChar.writeValue((byte)0xAB);
+  //   // detectedGestureChar.writeValue(kind);
   // }
+
 }
 
 #endif  // ARDUINO_EXCLUDE_CODE

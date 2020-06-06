@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +29,7 @@ int prediction_suppression_count = 0;
 }  // namespace
 
 // Return the result of the last prediction
-// 0: wing("W"), 1: ring("O"), 2: slope("angle"), 3: unknown
-int PredictGesture(float* output) {
+int PredictGesture(tflite::ErrorReporter* error_reporter, float* output) {
   // Record the latest predictions in our rolling history buffer.
   for (int i = 0; i < kGestureCount; ++i) {
     prediction_history[i][prediction_history_index] = output[i];

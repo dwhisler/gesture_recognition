@@ -1,3 +1,7 @@
+/*
+  Modified by David Whisler
+*/
+
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +20,12 @@ limitations under the License.
 // This is a standard TensorFlow Lite model file that has been converted into a
 // C data array, so it can be easily compiled into a binary for devices that
 // don't have a file system. It was created using the command:
-// xxd -i magic_wand_model.tflite > magic_wand_model_data.cc
+// xxd -i <quantized_model>.tflite > <gesture_model_data>.cc
 
-#ifndef TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_MAGIC_WAND_MODEL_DATA_H_
-#define TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_MAGIC_WAND_MODEL_DATA_H_
+#ifndef GESTURE_MODEL_DATA_H_
+#define GESTURE_MODEL_DATA_H_
 
 extern const unsigned char g_gesture_model_data[];
 extern unsigned int g_gesture_model_data_len;
 
-#endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_MAGIC_WAND_MAGIC_WAND_MODEL_DATA_H_
+#endif
