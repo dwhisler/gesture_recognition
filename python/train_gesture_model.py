@@ -69,7 +69,7 @@ def build_model(data_axes, seq_length, num_classes):
 
 # Trains Keras model
 def train_model():
-    path = '../data/session5/'
+    path = '../data/session4/'
     users = ['david']
     gestures = ['none', 'up', 'down', 'right']
     num_takes = 50
@@ -82,7 +82,7 @@ def train_model():
 
     X = X[:, :, :, np.newaxis] # add channels axis (1)
 
-    X = X[:, :, 0:5:2] # acceleration data only
+    # X = X[:, :, 0:5:2] # acceleration data only
     # X = X[:, :, 1:6:2] # gyroscope data only
     # X = X[:, :, 6:] # quaternion data only
     # X = X[:, :, :6] # acceleration & gyro data only
@@ -110,7 +110,7 @@ def train_model():
     model.fit(ds_train, epochs=epochs, validation_data=ds_test)
     model.evaluate(ds_test)
 
-    model.save('../saved_models/rel_gestures_model_aug_acc')
+    model.save('../saved_models/tilt_gestures_model_aug_acc_emabias')
 
 
 if __name__ == '__main__':

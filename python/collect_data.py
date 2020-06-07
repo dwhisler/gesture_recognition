@@ -34,7 +34,7 @@ def read_session_fixed_len():
 
         performer = "david"
         take = 1
-        gesture = 'right'
+        gesture = 'down'
         seq_length = 256
 
         print('Gesture:', gesture)
@@ -67,7 +67,7 @@ def read_session_fixed_len():
 
 # Parses raw data from serial port and saves to local file
 def parse_data(raw_data, gesture, performer, take):
-    path = '../data/session5/'
+    path = '../data/session6/'
 
     fname = path + performer + '_' + gesture + '_' + str(take) + '.csv'
 

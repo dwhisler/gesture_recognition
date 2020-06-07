@@ -4,7 +4,7 @@ import tensorflow as tf
 from train_gesture_model import load_data
 from sklearn.model_selection import train_test_split
 
-path = '../data/session5/'
+path = '../data/session4/'
 users = ['david']
 gestures = ['none', 'up', 'down', 'right']
 num_takes = 50
@@ -24,9 +24,9 @@ def representative_dataset_gen():
 # After conversion, must convert to TFLite flatbuffer with command:
 # xxd -i <quantized_model>.tflite > <gesture_model_data>.cc
 def deploy_model():
-    saved_model_dir = '../saved_models/rel_gestures_model_aug_acc'
-    unquantized_tflite_model_dir = '../saved_models/unquant_rel_acc.tflite'
-    quantized_tflite_model_dir = '../saved_models/quant_rel_acc.tflite'
+    saved_model_dir = '../saved_models/tilt_gestures_model_aug_acc'
+    unquantized_tflite_model_dir = '../saved_models/tilt_gestures_model_aug_acc_unquant.tflite'
+    quantized_tflite_model_dir = '../saved_models/tilt_gestures_model_aug_acc_quant.tflite'
 
     converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir)
     converter.representative_dataset = representative_dataset_gen

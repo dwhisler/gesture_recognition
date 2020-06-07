@@ -47,8 +47,6 @@ TfLiteStatus SetupIMU(tflite::ErrorReporter* error_reporter) {
   error_reporter->Report("Measuring bias...");
   sf.measureImuBias();
 
-  error_reporter->Report("Magic starts!");
-
   return kTfLiteOk;
 }
 

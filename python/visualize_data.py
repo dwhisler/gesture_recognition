@@ -16,7 +16,7 @@ def visualize_data():
     data_dict, sample_rate = load_data(path, users, gestures, num_takes, seq_length)
     (X, y) = data_dict['david']
 
-    ex = X[2,:,:]
+    ex = X[0,:,:]
 
     fig, ax = plt.subplots(1,3)
     # Acceleration
@@ -24,17 +24,23 @@ def visualize_data():
     ax[0].plot(np.arange(seq_length), ex[:,2])
     ax[0].plot(np.arange(seq_length), ex[:,4])
     ax[0].set_title('Acceleration')
+    ax[0].set_xlabel('Time')
     # Gyroscope
     ax[1].plot(np.arange(seq_length), ex[:,1])
     ax[1].plot(np.arange(seq_length), ex[:,3])
     ax[1].plot(np.arange(seq_length), ex[:,5])
     ax[1].set_title('Gyroscope')
+    ax[1].set_xlabel('Time')
     # Quaternion
     ax[2].plot(np.arange(seq_length), ex[:,6])
     ax[2].plot(np.arange(seq_length), ex[:,7])
     ax[2].plot(np.arange(seq_length), ex[:,8])
     ax[2].plot(np.arange(seq_length), ex[:,9])
     ax[2].set_title('Quaternion')
+    ax[2].set_xlabel('Time')
+
+    fig.suptitle('Gesture: Down')
+    fig.set_size_inches(10,5)
 
     plt.show()
 

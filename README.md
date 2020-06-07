@@ -1,88 +1,44 @@
 # Project Title
 
-Gesture Recognition Using a CNN on an Embedded Platform
+Gesture Recognition using Sensor Fusion & Deep Learning on an Arduino Embedded Platform
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+It is best to set up a virtual environment to install the Python requirements, which can be installed with the command `pip install -r requirements.txt`.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+* Python 3.7.5
+* Python dependencies listed in [requirements.txt](requirements.txt)
+* Arduino 1.8.12
+* Arduino_TensorFlowLite 2.1.0-ALPHA
+* Arduino_LSM9DS1 1.1.0
+* xxd
 
-```
-Note about installing requirements.txt
-Note about installing Arduino LSM9DS1 library
-```
+### Data Collection
+Data is collected using the script [collect_data.py](collect_data.py) with the project [data_collection.ino](data_collection.ino) running on the Arduino.
 
-### Installing
+## Training
 
-A step by step series of examples that tell you how to get a development env running
+A model can be trained using the script [train_gesture_model.py](train_gesture_model.py).
 
-Say what the step will be
+## Quantization and Deploying to Arduino
 
-```
-Give the example
-```
+A trained model can be deployed to the Arduino by first running the script [deploy_model.py](deploy_model.py).
+Then, the command `xxd -i <quantized_model>.tflite > <gesture_model_data>.cc` must be run to generate a TFLite Flatbuffer.
+Finally, the contents of this file must be copied to the file [gesture_model_data.cpp](gesture_model_data.cpp) in the gesture_model project.
 
-And repeat
+## Running
 
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+When the model is deployed, the project [gesture_model.ino](gesture_model.ino) must be running on the Arduino.
+Then, with the Arduino connected over serial, the script [gesture_interpreter.py](gesture_interpreter.py) can be run to demonstrate the YouTube video control application.
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+* **David Whisler**
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Pete Warden (thank you for your help!)
+* TensorflowLite Magic Wand example, on which this project is based
+* Gordon Wetzstein's EE267 (Virtual Reality) class at Stanford, on which the sensor fusion algorithm is based
