@@ -1,10 +1,9 @@
-# Project Title
-
-Gesture Recognition using Sensor Fusion & Deep Learning on an Arduino Embedded Platform
+## Gesture Recognition using Sensor Fusion & Deep Learning on an Arduino Embedded Platform
 
 ## Getting Started
 
-It is best to set up a virtual environment to install the Python requirements, which can be installed with the command `pip install -r requirements.txt`.
+It is best to set up a virtual environment to install the Python requirements, which can be installed with the command:
+`pip install -r requirements.txt`
 
 ### Prerequisites
 
@@ -25,8 +24,9 @@ A model can be trained using the script [train_gesture_model.py](train_gesture_m
 ## Quantization and Deploying to Arduino
 
 A trained model can be deployed to the Arduino by first running the script [deploy_model.py](deploy_model.py).
-Then, the command `xxd -i <quantized_model>.tflite > <gesture_model_data>.cc` must be run to generate a TFLite Flatbuffer.
-Finally, the contents of this file must be copied to the file [gesture_model_data.cpp](gesture_model_data.cpp) in the gesture_model project.
+Then, the command:
+`xxd -i <quantized_model>.tflite > <gesture_model_data>.cc`
+must be run to generate a TFLite Flatbuffer. Finally, the contents of this file must be copied to the file [gesture_model_data.cpp](gesture_model_data.cpp) in the gesture_model project.
 
 ## Running
 
