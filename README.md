@@ -1,5 +1,9 @@
 ## Gesture Recognition using Sensor Fusion & Deep Learning on an Arduino Embedded Platform
 
+## Paper
+
+See the written report at [EE292D_Final_Report.pdf](EE292D_Final_Report.pdf)
+
 ## Getting Started
 
 It is best to set up a virtual environment to install the Python requirements, which can be installed with the command:

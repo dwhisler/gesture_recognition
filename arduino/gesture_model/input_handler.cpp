@@ -46,6 +46,8 @@ TfLiteStatus SetupIMU(tflite::ErrorReporter* error_reporter) {
   // Compute initial value for accelerometer and gyro bias
   error_reporter->Report("Measuring bias...");
   sf.measureImuBias();
+  error_reporter->Report("Ready!");
+
 
   return kTfLiteOk;
 }
